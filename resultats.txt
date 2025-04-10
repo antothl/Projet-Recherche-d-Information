@@ -1,0 +1,7 @@
+trecqa_train-all  :default : map: 0.77, mrr :0.83
+
+wiki_qa_train default : map 0.72, mrr : 0.78		Avec aquaint+wiki comme embeddings et toutes les features
+
+
+
+
