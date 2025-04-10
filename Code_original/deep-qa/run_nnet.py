@@ -151,7 +151,7 @@ def main():
     parser.add_argument('-e', choices=['GoogleNews', 'aquaint+wiki'],
                         help='word embeddings file to use')
     parser.add_argument('mode')
-    parser.set_defaults(early_stop=3, e='GoogleNews', dropout_rate=0.5, nkernels=100)
+    parser.set_defaults(early_stop=3, e='aquaint+wiki', dropout_rate=0.5, nkernels=100)
     args = parser.parse_args()
 
     # ZEROUT_DUMMY_WORD = False

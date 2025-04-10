@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 import re
 import os
 import numpy as np
@@ -13,10 +16,12 @@ UNKNOWN_WORD_IDX = 0
 
 def load_data(fname):
   lines = open(fname).readlines()
-  qids, questions, answers, labels = [], [], [], []
+  qids, questions, answers, labels,aids = [], [], [], [],[]
   num_skipped = 0
   prev = ''
   qid2num_answers = {}
+  answer2aid = {}  # Dictionnaire pour map chaque reponse unique à un ID unique
+  aid_counter = 0  # Compteur pour generer des Answer IDs uniques
   for i, line in enumerate(lines):
     line = line.strip()
 
@@ -37,6 +42,11 @@ def load_data(fname):
       if len(answer) > 60:
         num_skipped += 1
         continue
+      answer_tuple = tuple(answer)  # Convertir la reponse en tuple pour gestion unique
+      if answer_tuple not in answer2aid:
+          answer2aid[answer_tuple] = aid_counter  # Assigner un ID unique
+          aid_counter += 1
+      aids.append(answer2aid[answer_tuple])  # Ajouter l'ID à la liste des aids
       labels.append(label)
       answers.append(answer)
       questions.append(question)
@@ -45,7 +55,7 @@ def load_data(fname):
     prev = line
   # print sorted(qid2num_answers.items(), key=lambda x: float(x[0]))
   print 'num_skipped', num_skipped
-  return qids, questions, answers, labels
+  return qids, questions, answers, labels, aids
 
 
 def compute_overlap_features(questions, answers, word2df=None, stoplist=None):
@@ -175,7 +185,7 @@ if __name__ == '__main__':
     subprocess.call("/bin/cat {} > {}".format(files, all_fname), shell=True)
 
     # qids, questions, answers, labels = load_data(all_fname, stoplist)
-    qids, questions, answers, labels = load_data(all_fname)
+    qids, questions, answers, labels, aids = load_data(all_fname)
 
     ### Compute document frequencies.
     seen = set()
@@ -211,7 +221,7 @@ if __name__ == '__main__':
     for fname in [train, dev, test]:
       print fname
       # qids, questions, answers, labels = load_data(fname, stoplist)
-      qids, questions, answers, labels = load_data(fname)
+      qids, questions, answers, labels, aids = load_data(fname)
 
       overlap_feats = compute_overlap_features(questions, answers, stoplist=None, word2df=word2dfs)
       overlap_feats_stoplist = compute_overlap_features(questions, answers, stoplist=stoplist, word2df=word2dfs)
@@ -221,6 +231,7 @@ if __name__ == '__main__':
       print 'overlap_feats', overlap_feats.shape
 
       qids = np.array(qids)
+      aids = np.array(aids)
       labels = np.array(labels).astype('int32')
 
       _, counts = np.unique(labels, return_counts=True)
@@ -243,6 +254,7 @@ if __name__ == '__main__':
       np.save(os.path.join(outdir, '{}.questions.npy'.format(basename)), questions_idx)
       np.save(os.path.join(outdir, '{}.answers.npy'.format(basename)), answers_idx)
       np.save(os.path.join(outdir, '{}.labels.npy'.format(basename)), labels)
+      np.save(os.path.join(outdir, '{}.aids.npy'.format(basename)), aids)
       np.save(os.path.join(outdir, '{}.overlap_feats.npy'.format(basename)), overlap_feats)
 
       np.save(os.path.join(outdir, '{}.q_overlap_indices.npy'.format(basename)), q_overlap_indices)
