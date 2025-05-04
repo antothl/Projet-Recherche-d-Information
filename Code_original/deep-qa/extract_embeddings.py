@@ -30,6 +30,7 @@ def main():
 
     for fname in [
                   'embeddings/aquaint+wiki.txt.gz.ndim=50.bin',
+                  'embeddings/GoogleNews-vectors-negative300.bin'
                   ]:
       word2vec = load_bin_vec(fname, words)
 
