@@ -1,9 +1,0 @@
-gensim
-glove-python
-KrovetzStemmer>=0.4
-lxml
-nltk
-numpy
-pandas
-PorterStemmer
-sh

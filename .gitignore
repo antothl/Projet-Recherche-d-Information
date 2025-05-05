@@ -1,2 +1,3 @@
 /Resultats/
-/Code_original/deep-qa/TRAIN-ALL/emb_GoogleNews-vectors-negative300.bin.npy
+/Code/deep-qa/TRAIN-ALL/emb_GoogleNews-vectors-negative300.bin.npy
+/Code/deep-qa/TRAIN/emb_GoogleNews-vectors-negative300.bin.npy
