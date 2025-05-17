@@ -15,9 +15,9 @@ import architecture
 import random
 
 SEED = 12
-TRAIN = pd.read_csv("data/post_train.tsv", sep="\t")
-TEST = pd.read_csv("data/post_test.tsv", sep="\t")
-DEV = pd.read_csv("data/post_dev.tsv", sep="\t")
+TRAIN = pd.read_csv("data/WikiQA-train.tsv", sep="\t")
+TEST = pd.read_csv("data/WikiQA-test.tsv", sep="\t")
+DEV = pd.read_csv("data/WikiQA-dev.tsv", sep="\t")
 
 D = {data.DocumentID for data in TRAIN.itertuples()}.union({data.DocumentID for data in TEST.itertuples()}).union({data.DocumentID for data in DEV.itertuples()})
 DP = my_scripts.index_document_phrase(D, TRAIN, TEST, DEV)
